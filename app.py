@@ -18,35 +18,158 @@ st.set_page_config(page_title="Heart Disease Predictor", page_icon="❤️", lay
 
 # ---------- custom styling ----------
 st.markdown("""
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+
+html, body, [class*="css"] {
+    font-family: 'Inter', sans-serif;
+}
+
+/* animated gradient app background */
+.stApp {
+    background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #3a0d12);
+    background-size: 400% 400%;
+    animation: gradientShift 18s ease infinite;
+}
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* hero title */
 .big-title {
-    font-size: 2.4rem;
+    font-family: 'Poppins', sans-serif;
+    font-size: 3rem;
     font-weight: 800;
-    background: linear-gradient(90deg, #ff4b4b, #ff8b8b);
+    background: linear-gradient(90deg, #ff4b4b, #ff8b8b, #ffb199);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    display: inline-block;
+    animation: heartbeat 1.8s ease-in-out infinite;
 }
-.metric-card {
-    background: #1e1e1e11;
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.04); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.03); }
+    60% { transform: scale(1); }
+}
+.subtitle {
+    color: #d8d8f0cc;
+    font-size: 1.05rem;
+    margin-top: -8px;
+}
+
+/* glass cards everywhere */
+[data-testid="stVerticalBlockBorderWrapper"], .metric-card {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+}
+
+/* sidebar glass */
+[data-testid="stSidebar"] {
+    background: rgba(15, 12, 41, 0.85);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(255,255,255,0.08);
+}
+[data-testid="stSidebar"] * {
+    color: #f0f0ff !important;
+}
+
+/* metric widgets */
+[data-testid="stMetric"] {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 14px 16px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+}
+[data-testid="stMetric"]:hover {
+    transform: translateY(-3px);
+    border-color: #ff4b4b66;
+}
+
+/* tabs */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 6px;
+    background: rgba(255,255,255,0.04);
+    padding: 6px;
     border-radius: 14px;
-    padding: 14px 18px;
-    border: 1px solid #ffffff22;
 }
-.risk-badge-high {
-    background: #ff4b4b22;
-    color: #ff4b4b;
-    padding: 4px 12px;
-    border-radius: 20px;
+.stTabs [data-baseweb="tab"] {
+    border-radius: 10px;
+    color: #d8d8f0;
     font-weight: 600;
+    padding: 8px 18px;
+}
+.stTabs [aria-selected="true"] {
+    background: linear-gradient(90deg, #ff4b4b, #ff8b8b) !important;
+    color: white !important;
+}
+
+/* primary button glow */
+button[kind="primary"] {
+    background: linear-gradient(90deg, #ff4b4b, #ff7b7b) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 0 20px rgba(255,75,75,0.45);
+    transition: all 0.25s ease;
+}
+button[kind="primary"]:hover {
+    box-shadow: 0 0 30px rgba(255,75,75,0.75);
+    transform: translateY(-2px) scale(1.01);
+}
+
+/* headings glow */
+h2, h3 {
+    color: #f5f5ff !important;
+}
+
+/* badges */
+.risk-badge-high {
+    background: linear-gradient(90deg, #ff4b4b33, #ff4b4b11);
+    color: #ff7b7b;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 700;
     font-size: 0.85rem;
+    border: 1px solid #ff4b4b55;
+    display: inline-block;
 }
 .risk-badge-ok {
-    background: #21c35422;
-    color: #21c354;
-    padding: 4px 12px;
+    background: linear-gradient(90deg, #21c35433, #21c35411);
+    color: #4ee08a;
+    padding: 6px 14px;
     border-radius: 20px;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 0.85rem;
+    border: 1px solid #21c35455;
+    display: inline-block;
+}
+
+/* dataframes / expanders rounding */
+[data-testid="stExpander"], .stDataFrame {
+    border-radius: 14px !important;
+    overflow: hidden;
+}
+
+/* scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #ff4b4b88; border-radius: 10px; }
+
+/* divider glow */
+hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #ff4b4b88, transparent);
 }
 </style>
 """, unsafe_allow_html=True)
@@ -75,11 +198,13 @@ with st.sidebar:
 
 # ---------- header ----------
 st.markdown('<p class="big-title">❤️ Heart Disease Risk Predictor</p>', unsafe_allow_html=True)
-st.write(
-    f"Powered by a **KNN classifier** trained on the UCI Heart Disease dataset "
-    f"— **{round(model_info['accuracy'] * 100, 2)}%** test accuracy. "
-    "Fill in the patient's details below to get an instant risk estimate."
+st.markdown(
+    f'<p class="subtitle">Powered by a <b>KNN classifier</b> trained on the UCI Heart '
+    f'Disease dataset — <b>{round(model_info["accuracy"] * 100, 2)}%</b> test accuracy. '
+    'Fill in the patient\'s details below to get an instant risk estimate.</p>',
+    unsafe_allow_html=True
 )
+st.write("")
 
 tab_predict, tab_insights, tab_history, tab_about = st.tabs(
     ["🔍 Predict", "📊 Model Insights", "🕓 History", "ℹ️ About"]
