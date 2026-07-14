@@ -17,7 +17,7 @@ with open("model_info.pkl", "rb") as f:
 st.set_page_config(page_title="Heart Disease Predictor", page_icon="❤️", layout="wide")
 
 # ---------- custom styling ----------
-st.markdown("""
+st.html("""
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 
@@ -172,7 +172,7 @@ hr {
     background: linear-gradient(90deg, transparent, #ff4b4b88, transparent);
 }
 </style>
-""", unsafe_allow_html=True)
+""")
 
 if "history" not in st.session_state:
     st.session_state.history = []
